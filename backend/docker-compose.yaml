@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=uptime-monitor'
+      - 'POSTGRES_PASSWORD=uptime-dev'
+      - 'POSTGRES_USER=uptime-user'
+    ports:
+      - '5432:5432'
