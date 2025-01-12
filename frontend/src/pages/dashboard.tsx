@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { MonitorService } from "@/services/monitor-service"
 import { MonitorDefinition } from "@/types/monitor"
-import { Button } from "@/components/ui/button"
 
 export function DashboardPage() {
   const [monitors, setMonitors] = useState<MonitorDefinition[]>([])

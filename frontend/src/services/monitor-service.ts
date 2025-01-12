@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MonitorDefinition, MonitorResult, MonitorResultsResponse } from '@/types/monitor'
+import { MonitorDefinition, MonitorResultsResponse } from '@/types/monitor'
 
 const API_BASE_URL = '/api'
 

@@ -9,18 +9,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import uk.co.willtuffin.uptimemonitor.dto.MonitorResultsResponse;
 import uk.co.willtuffin.uptimemonitor.entity.MonitorDefinition;
 import uk.co.willtuffin.uptimemonitor.entity.MonitorResult;
 import uk.co.willtuffin.uptimemonitor.repository.UptimeDefinitionRepository;
 import uk.co.willtuffin.uptimemonitor.repository.MonitorResultRepository;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -131,14 +135,44 @@ class UptimeMonitorControllerTest {
     void getMonitorResults_ShouldReturnResultsForMonitor() {
         // Arrange
         Long monitorId = 1L;
+        Instant endDate = Instant.now();
+        Instant startDate = endDate.minus(30, ChronoUnit.DAYS);
         List<MonitorResult> expectedResults = Arrays.asList(testMonitorResult);
-        when(resultRepository.findByMonitorDefinitionIdOrderByCheckTimeDesc(monitorId)).thenReturn(expectedResults);
+
+        when(resultRepository.findByMonitorDefinitionIdAndCheckTimeBetweenOrderByCheckTimeDesc(
+                eq(monitorId), any(Instant.class), any(Instant.class))).thenReturn(expectedResults);
 
         // Act
-        List<MonitorResult> actualResults = controller.getMonitorResults(monitorId);
+        MonitorResultsResponse response = controller.getMonitorResults(monitorId, null, null);
 
         // Assert
-        assertEquals(expectedResults, actualResults);
-        verify(resultRepository).findByMonitorDefinitionIdOrderByCheckTimeDesc(monitorId);
+        assertNotNull(response);
+        assertEquals(expectedResults, response.getResults());
+        assertTrue(response.getStartDate().isBefore(response.getEndDate()));
+        verify(resultRepository).findByMonitorDefinitionIdAndCheckTimeBetweenOrderByCheckTimeDesc(
+                eq(monitorId), any(Instant.class), any(Instant.class));
+    }
+
+    @Test
+    void getMonitorResults_WithDateRange_ShouldReturnResultsForMonitor() {
+        // Arrange
+        Long monitorId = 1L;
+        Instant endDate = Instant.now();
+        Instant startDate = endDate.minus(7, ChronoUnit.DAYS);
+        List<MonitorResult> expectedResults = Arrays.asList(testMonitorResult);
+
+        when(resultRepository.findByMonitorDefinitionIdAndCheckTimeBetweenOrderByCheckTimeDesc(
+                monitorId, startDate, endDate)).thenReturn(expectedResults);
+
+        // Act
+        MonitorResultsResponse response = controller.getMonitorResults(monitorId, startDate, endDate);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(expectedResults, response.getResults());
+        assertEquals(startDate, response.getStartDate());
+        assertEquals(endDate, response.getEndDate());
+        verify(resultRepository).findByMonitorDefinitionIdAndCheckTimeBetweenOrderByCheckTimeDesc(
+                monitorId, startDate, endDate);
     }
 }
