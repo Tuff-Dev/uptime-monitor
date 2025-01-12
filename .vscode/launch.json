@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-UptimeMonitorApplication<uptime-monitor>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "uk.co.willtuffin.uptimemonitor.UptimeMonitorApplication",
+            "projectName": "uptime-monitor",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

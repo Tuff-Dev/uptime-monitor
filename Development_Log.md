@@ -1,4 +1,4 @@
-# Step Zero - Setup the project
+# Step 0 - Setup the project
 ## Backend
 - Java Spring Boot - Java 21 - Bootstraped with Spring Initializr
 - Database - PostgreSQL
@@ -15,3 +15,8 @@
 - Vite
 - Shadcn/UI
 
+# Step 1 - Enter URL to be monitored
+- Create an API endpoint to store the URL in the database
+- Also created the get, update and delete endpoints for uptime monitoring
+
+- Build UI to add monitors
