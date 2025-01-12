@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MonitorDefinition } from '@/types/monitor'
+import { MonitorDefinition, MonitorResult, MonitorResultsResponse } from '@/types/monitor'
 
 const API_BASE_URL = '/api'
 
@@ -21,5 +21,16 @@ export const MonitorService = {
 
   async deleteMonitor(id: number): Promise<void> {
     await axios.delete(`${API_BASE_URL}/uptime-monitor/${id}`)
+  },
+
+  async getMonitorResults(id: number, startDate?: Date, endDate?: Date): Promise<MonitorResultsResponse> {
+    let url = `${API_BASE_URL}/uptime-monitor/${id}/results`
+    
+    if (startDate && endDate) {
+      url += `?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
+    }
+    
+    const response = await axios.get<MonitorResultsResponse>(url)
+    return response.data
   }
 } 

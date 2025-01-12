@@ -1,0 +1,11 @@
+:root {
+  /* ... other variables ... */
+  --success: hsl(142.1 76.2% 36.3%);
+  --primary: hsl(221.2 83.2% 53.3%);
+}
+
+.dark {
+  /* ... other dark mode variables ... */
+  --success: hsl(142.1 70.6% 45.3%);
+  --primary: hsl(217.2 91.2% 59.8%);
+} 
